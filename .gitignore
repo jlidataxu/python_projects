@@ -1,6 +1,9 @@
 # python compiled file
 *.py[cod]
 
+# virtual environment
+venv
+
 # random temporary files
 *~
 *#
