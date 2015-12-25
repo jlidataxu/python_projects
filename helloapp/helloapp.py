@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for
 app = Flask(__name__)
 
 # index page
@@ -19,6 +19,10 @@ def show_postid(post_id):
 @app.route('/hello')
 def hello_world():
 	return 'Hello Beautiful World!!' 
+
+@app.route('/show_url_for')
+def show_url_for():
+	return url_for('show_userprofile', username='jamesli')
 
 # main method
 if __name__ == '__main__':
