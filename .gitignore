@@ -4,6 +4,9 @@
 # virtual environment
 venv
 
+# log file
+*.log
+
 # random temporary files
 *~
 *#

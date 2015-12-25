@@ -1,4 +1,6 @@
 from flask import Flask, url_for, request, render_template, redirect, flash, make_response, session
+import logging
+from logging.handlers import RotatingFileHandler
 app = Flask(__name__)
 # =======================
 # 0.1 hello page, debug
@@ -73,6 +75,8 @@ def login():
 			return redirect(url_for('welcome'))
 		else:
 			error = "Incorrect username and password"
+			# 1.4.2 logger: log warning for incorrect username
+			app.logger.warning("Incorrect username or password for user %s" , request.form.get('username'))
 	return render_template('login.html', error=error)
 
 def valid_login(username, password):
@@ -111,6 +115,10 @@ if __name__ == '__main__':
 	# turn on debug mode
 	# 0.7.3 flash: add secret key
 	app.secret_key = ']\xd9\xa6}\x82\xf3}\x82\x1f\xb3\x9e\x9d\xb0\xa7\x17\x7f\x0e6\xa8\x13\x8b\xb0]U'
+	# 1.2 logger: 1) add hondler
+	handler = RotatingFileHandler('error.log', maxBytes=10000, backupCount=1)
+	handler.setLevel(logging.INFO)
+	app.logger.addHandler(handler)
 	app.debug = True
 	# run app
 	app.run()
