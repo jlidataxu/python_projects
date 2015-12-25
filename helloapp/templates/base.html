@@ -1,3 +1,4 @@
+<!-- 0.8 template inheritance -->
 <!doctype html>
 <html>
 
@@ -8,7 +9,10 @@
 </head>
 
 <body>
-	<h1>Cloud Inc.</h1>
+	<!-- 0.9 static -->
+	<div id="logo">
+		<img src="{{ url_for('static', filename='logo.png')}}" alt="Cloud Inc" height=100px>
+	</div>
 	<!-- 0.7.2 flash: html update begin-->
 	{% with messages = get_flashed_messages() %}
 	{% if messages %}
