@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, render_template, redirect
+from flask import Flask, url_for, request, render_template, redirect, flash
 app = Flask(__name__)
 # =======================
 # 0.1 hello page, debug
@@ -63,6 +63,8 @@ def login():
 	if request.method == 'POST':
 		if valid_login(request.form.get('username'),request.form.get('password')):
 			# 0.6.1 redirect method
+			# 0.7 flash
+			flash("Succesfully logged in")
 			return redirect(url_for('welcome', username=request.form.get('username')))
 		else:
 			error = "Incorrect username and password"
@@ -88,6 +90,8 @@ def welcome(username):
 # main method
 if __name__ == '__main__':
 	# turn on debug mode
+	# 0.7 flash add secret key
+	app.secret_key = 'SuperSecretKey'
 	app.debug = True
 	# run app
 	app.run()
