@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, render_template, redirect, flash
+from flask import Flask, url_for, request, render_template, redirect, flash, make_response
 app = Flask(__name__)
 # =======================
 # 0.1 hello page, debug
@@ -9,9 +9,9 @@ def hello_world():
 # =======================
 # 0.2 route: index page, userprofile,  post page
 # =======================
-@app.route('/')
-def index():
-	return 'Index Page'
+# @app.route('/')
+# def index():
+# 	return 'Index Page'
 
 # user profile page
 @app.route('/user/<username>')
@@ -65,8 +65,10 @@ def login():
 			# 0.6.1 redirect method
 			# 0.7.1 flash: message
 			flash("Succesfully logged in")
-			flash("thanks for coming")
-			return redirect(url_for('welcome', username=request.form.get('username')))
+			# 1.0 coookie: 1) use response to set cookie
+			response = make_response(redirect(url_for('welcome')))
+			response.set_cookie('username', request.form.get('username'))
+			return response
 		else:
 			error = "Incorrect username and password"
 	return render_template('login.html', error=error)
@@ -83,10 +85,21 @@ def valid_login(username, password):
 # 2) create welcome page
 # 3) create welcome.html template
 # =======================
-@app.route('/welcome/<username>')
+# 1.0 cookie: 2) update welcome function to use cookie to get username
+@app.route('/')
+def welcome():
+	username = request.cookies.get("username")
+	if username:
+		return render_template('welcome.html', username=username)
+	else:
+		return redirect(url_for('login'))
 
-def welcome(username):
-	return render_template('welcome.html', username=username)
+# 1.0 cookie: 3) add logout function
+@app.route('/logout')
+def logout():
+	response = make_response(redirect(url_for('login')))
+	response.set_cookie('username', '', expires=0)
+	return response
 
 # main method
 if __name__ == '__main__':

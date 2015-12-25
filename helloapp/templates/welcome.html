@@ -11,6 +11,6 @@
 
 {% block content %}
 
-<p>Welcome back {{ username }}</p>
+<p>Welcome back {{ username }} <a href="{{ url_for('logout') }}">logout</a></p>
 
 {% endblock %}
