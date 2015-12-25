@@ -63,8 +63,9 @@ def login():
 	if request.method == 'POST':
 		if valid_login(request.form.get('username'),request.form.get('password')):
 			# 0.6.1 redirect method
-			# 0.7 flash
+			# 0.7.1 flash: message
 			flash("Succesfully logged in")
+			flash("thanks for coming")
 			return redirect(url_for('welcome', username=request.form.get('username')))
 		else:
 			error = "Incorrect username and password"
@@ -90,7 +91,7 @@ def welcome(username):
 # main method
 if __name__ == '__main__':
 	# turn on debug mode
-	# 0.7 flash add secret key
+	# 0.7.3 flash: add secret key
 	app.secret_key = 'SuperSecretKey'
 	app.debug = True
 	# run app

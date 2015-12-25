@@ -1,5 +1,8 @@
-<!doctype html>
-<title>login page</title>
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
 <form action="{{ url_for('login')}}" method="POST">
 	{% if error %}
 	<p style="color:red;">
@@ -16,3 +19,5 @@
 
 	<button type="submit">Login</button>
 </form>
+
+{% endblock %}

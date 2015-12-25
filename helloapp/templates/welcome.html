@@ -1,14 +1,16 @@
-<!doctype html>
-<!-- 0.7.2 flash: html update begin-->
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul class='flashes'>
-	{% for message in messages%}
-	<li>{{ message }}</li>
-	{% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
-<!-- 0.7.2 flash: html update  end-->
-<title>welcome page</title>
+<!-- 0.8 Template inheritance -->
+{% extends "base.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block head %}
+{{ super() }}
+<script type="text/javascript">var x = 1;</script>
+
+{% endblock %}
+
+{% block content %}
+
 <p>Welcome back {{ username }}</p>
+
+{% endblock %}
