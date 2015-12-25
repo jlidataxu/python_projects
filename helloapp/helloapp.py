@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, render_template, redirect, flash, make_response
+from flask import Flask, url_for, request, render_template, redirect, flash, make_response, session
 app = Flask(__name__)
 # =======================
 # 0.1 hello page, debug
@@ -66,9 +66,11 @@ def login():
 			# 0.7.1 flash: message
 			flash("Succesfully logged in")
 			# 1.0 coookie: 1) use response to set cookie
-			response = make_response(redirect(url_for('welcome')))
-			response.set_cookie('username', request.form.get('username'))
-			return response
+			# response = make_response(redirect(url_for('welcome')))
+			# response.set_cookie('username', request.form.get('username'))
+			# 1.1 session: 1) use session to get username
+			session['username'] = request.form.get('username')
+			return redirect(url_for('welcome'))
 		else:
 			error = "Incorrect username and password"
 	return render_template('login.html', error=error)
@@ -88,24 +90,27 @@ def valid_login(username, password):
 # 1.0 cookie: 2) update welcome function to use cookie to get username
 @app.route('/')
 def welcome():
-	username = request.cookies.get("username")
-	if username:
-		return render_template('welcome.html', username=username)
+	#username = request.cookies.get("username")
+	# 1.1 session: 2) update welcome function
+	if 'username' in session:
+		return render_template('welcome.html', username=session['username'])
 	else:
 		return redirect(url_for('login'))
 
 # 1.0 cookie: 3) add logout function
 @app.route('/logout')
 def logout():
-	response = make_response(redirect(url_for('login')))
-	response.set_cookie('username', '', expires=0)
-	return response
+	# response = make_response(redirect(url_for('login')))
+	# response.set_cookie('username', '', expires=0)
+	# 1.1 session: 3) update logout function
+	session.pop('username', None)
+	return redirect(url_for('welcome'))
 
 # main method
 if __name__ == '__main__':
 	# turn on debug mode
 	# 0.7.3 flash: add secret key
-	app.secret_key = 'SuperSecretKey'
+	app.secret_key = ']\xd9\xa6}\x82\xf3}\x82\x1f\xb3\x9e\x9d\xb0\xa7\x17\x7f\x0e6\xa8\x13\x8b\xb0]U'
 	app.debug = True
 	# run app
 	app.run()
