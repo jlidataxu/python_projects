@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, render_template
+from flask import Flask, url_for, request, render_template, redirect
 app = Flask(__name__)
 # =======================
 # 0.1 hello page, debug
@@ -62,7 +62,8 @@ def login():
 	error = None
 	if request.method == 'POST':
 		if valid_login(request.form.get('username'),request.form.get('password')):
-			return 'Welcome back %s ' % request.form['username']
+			# 0.6.1 redirect method
+			return redirect(url_for('welcome', username=request.form.get('username')))
 		else:
 			error = "Incorrect username and password"
 	return render_template('login.html', error=error)
@@ -73,6 +74,16 @@ def valid_login(username, password):
 	else:
 		return False
 
+# =======================
+# 0.6 redirect
+# 1) redirect in login page
+# 2) create welcome page
+# 3) create welcome.html template
+# =======================
+@app.route('/welcome/<username>')
+
+def welcome(username):
+	return render_template('welcome.html', username=username)
 
 # main method
 if __name__ == '__main__':
