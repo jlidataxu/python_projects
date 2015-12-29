@@ -1,5 +1,6 @@
 # python compiled file
 *.py[cod]
+.Python
 
 # virtual environment
 venv

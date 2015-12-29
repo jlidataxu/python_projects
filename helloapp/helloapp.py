@@ -1,6 +1,8 @@
 from flask import Flask, url_for, request, render_template, redirect, flash, make_response, session
 import logging
 from logging.handlers import RotatingFileHandler
+import psycopg2 
+
 app = Flask(__name__)
 # =======================
 # 0.1 hello page, debug
@@ -80,10 +82,67 @@ def login():
 	return render_template('login.html', error=error)
 
 def valid_login(username, password):
-	if(username == password):
+	host= "localhost"
+	user= "postgres"
+	dbname = "my_flask_app" 
+	portNumber= "5432"
+	pgpass = ""
+	conn_string = "host='" + host +"' dbname='" + dbname + "' user='" + user + "' password='" + pgpass + "' port='" + portNumber + "'"
+	conn = psycopg2.connect(conn_string)
+	count_sql = ("""select count(*) from ws.user where username = '%s' and password = '%s' """  %(username, password))
+	print count_sql
+	count= sql_exec(conn,count_sql)[0][0]
+	#count = 1
+	if(count == 1):
 		return True
 	else:
 		return False
+ 
+
+# def sql_exec(conn,sql,copy_task_type='sql' , file='' ):
+#   try:  
+#      if copy_task_type == 'copy_to':
+#         f=open(file,'w')
+#         cur=conn.cursor()
+#         copy_sql= 'COPY'+' ('+sql+')  TO STDOUT WITH CSV HEADER'
+#         print copy_sql
+# 	cur.copy_expert(copy_sql, f)
+#         f.close() 
+#         return 
+#      else:
+#         cur=conn.cursor()
+#         cur.execute(sql)
+#         try:                    #inner try becuase some sql ops will not fetch any data (e.g. insert from select)
+#           return cur.fetchall()
+#         except:
+#           pass
+    
+#   except:
+#      error_info = ("SQL ERROR: %s %s " %(sql, sys.exc_info()[0])) 
+#      logger.error(error_info)	
+#      raise Exception('Database Related Error')
+
+def sql_exec(conn,sql,copy_task_type='sql', file=''):
+	try:
+		if copy_task_type == 'copy_to':
+			f=open(file,'w')
+			cur=conn.cursor()
+			copy_sql= 'COPY'+' ('+sql+')  TO STDOUT WITH CSV HEADER'
+			print copy_sql
+			cur.copy_expert(copy_sql, f)
+			f.close() 
+			return 
+		else:
+			cur=conn.cursor()
+			cur.execute(sql)
+			try:                   #inner try becuase some sql ops will not fetch any data (e.g. insert from select)
+				return cur.fetchall()
+			except:
+				pass
+	except:
+		error_info = ("SQL ERROR: %s %s " %(sql, sys.exc_info()[0])) 
+		logger.error(error_info)	
+		raise Exception('Database Related Error')
 
 # =======================
 # 0.6 redirect
