@@ -13,11 +13,27 @@
             <div class="form-group">
                 {{ form.fullname.label }}
                 {{ form.fullname|safe }}
+                
+                {% if form.fullname.errors %}
+                    <ul class="text-danger">
+                        {% for error in form.fullname.errors %}
+                            <li>{{ error }} </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
             
             <div class="form-group">
                 {{ form.email.label }}
                 {{ form.email|safe }}
+                
+                {% if form.fullname.errors %}
+                    <ul class="text-danger">
+                        {% for error in form.email.errors %}
+                            <li>{{ error }} </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
             <button type = "submit" class="btn btn-default">Register</button>
             
