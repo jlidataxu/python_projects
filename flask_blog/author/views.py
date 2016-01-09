@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request
 from flask_blog import app
 from author.form import RegisterForm
 
@@ -9,7 +9,7 @@ def login():
 @app.route('/register', methods=('GET', 'POST'))
 def register():
     form = RegisterForm()
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate():
         return redirect(url_for('success'))
     return render_template('author/register.html', form=form)
     
