@@ -19,7 +19,7 @@ def admin():
     
 @app.route('/setup', methods=('GET', 'POST'))
 def setup():
-    error = ""
+    error = None
     form = SetupForm()
     if request.method == 'POST' and form.validate():
         author = Author(
