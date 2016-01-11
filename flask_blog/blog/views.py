@@ -1,5 +1,5 @@
 from flask_blog import app
-from flask import render_template, redirect, flash, url_for, request
+from flask import render_template, redirect, flash, url_for, request, abort, session
 from blog.form import SetupForm
 from flask_blog import db
 from author.models import Author
@@ -10,15 +10,18 @@ import bcrypt
 @app.route('/')
 @app.route('/index')
 def index():
+    blogs = Blog.query.count()
+    if blogs == 0:
+        return redirect(url_for('setup'))
     return "Hello World!"
 
 @app.route('/admin')
 @login_required
 def admin():
-    blogs = Blog.query.count()
-    if blogs == 0:
-        return redirect(url_for('setup'))
-    return render_template('blog/admin.html')
+    if session.get('is_author'):
+        return render_template('blog/admin.html')
+    else:
+        abort(403)
     
 @app.route('/setup', methods=('GET', 'POST'))
 def setup():
