@@ -7,6 +7,8 @@ class Author(db.Model):
     username = db.Column(db.String(80), unique = True)
     password = db.Column(db.String(60))
     is_author = db.Column(db.Boolean)
+    
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     """docstring for Author"""
     def __init__(self, fullname, email, username, password, is_author=False):
