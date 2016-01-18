@@ -6,3 +6,4 @@ flask-wtf
 flask-migrate
 py-bcrypt
 flask-markdown
+-e git+https://github.com/fromzeroedu/flask_uploads#egg=flask_uploads
