@@ -1,5 +1,5 @@
 from flask_blog import app
-from flask import render_template, redirect, flash, url_for, request, abort, session
+from flask import render_template, redirect, flash, url_for, request, abort, session, abort
 from blog.form import SetupForm, PostForm
 from flask_blog import db, uploaded_images
 from author.models import Author
