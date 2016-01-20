@@ -17,7 +17,7 @@ def index(page=1):
     blog = Blog.query.first()
     if not blog:
         return redirect(url_for('setup'))
-    posts = Post.query.order_by(Post.publish_date.desc()).paginate(page, POSTS_PER_PAGE, False)
+    posts = Post.query.filter_by(live=True).order_by(Post.publish_date.desc()).paginate(page, POSTS_PER_PAGE, False)
     return render_template('blog/index.html', blog=blog, posts=posts)
 
 @app.route('/admin')
@@ -102,3 +102,21 @@ def post():
 def article(slug):
     post = Post.query.filter_by(slug=slug).first_or_404()
     return render_template('blog/article.html', post=post)
+
+@app.route('/edit/<int:post_id>', methods=('GET', 'POST'))
+@author_required
+def edit(post_id):
+    post = Post.query.filter_by(id=post_id).first_or_404()
+    form = PostForm(obj=post)
+    return render_template('blog/post.html', form=form, post=post, action="edit")
+    
+
+@app.route('/delete/<int:post_id>')
+@author_required
+def delete(post_id):
+    post = Post.query.filter_by(id=post_id).first_or_404()
+    post.live = False
+    db.session.commit()
+    flash("Article deleted")
+    return redirect('/admin')
+    
