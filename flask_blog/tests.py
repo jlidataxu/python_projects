@@ -48,11 +48,32 @@ class UserTest(unittest.TestCase):
             confirm = 'test'
             ),
         follow_redirects=True)
+    
+    def login(self, username, password):
+        return self.app.post('/login', data=dict(
+            username=username,
+            password=password
+            ),
+        follow_redirects=True)
+    
+    def logout(self):
+        return self.app.get('/logout', follow_redirects=True)
         
     def test_create_blog(self):
         rv = self.create_blog()
         # print(str(rv.data))
         assert 'Blog created' in str(rv.data)
         
+    def test_login(self):
+        self.create_blog()
+        rv = self.login('jamesli', 'test')
+        # print(str(rv.data))
+        assert 'User jamesli logged in' in str(rv.data)
+        rv = self.logout()
+        assert 'User logged out' in str(rv.data)
+        rv = self.login('jamesli', 'wrong')
+        assert 'incorrect username or password' in str(rv.data)
+        
+    
 if __name__ == '__main__':
     unittest.main()
