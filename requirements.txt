@@ -7,3 +7,7 @@ flask-migrate
 py-bcrypt
 flask-markdown
 -e git+https://github.com/fromzeroedu/flask_uploads#egg=flask_uploads
+pyopenssl ndg-httpsclient pyasn1
+mintapi
+pandas
+keyring

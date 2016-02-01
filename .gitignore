@@ -39,3 +39,9 @@ lift_proto.*.db
 
 # mac 'desktop service store' file
 .DS_Store
+
+# properties file
+*.properties
+
+# log file
+log*.*
