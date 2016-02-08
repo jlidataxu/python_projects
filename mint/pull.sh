@@ -4,4 +4,4 @@ PARENTDIR="$(dirname "$DIR")"
 source  $PARENTDIR/venv/bin/activate
 source $DIR/finance.properties
 
-mintapi --keyring $MINT_USER -t -f $TRANSACTION_FILE 
+python pull.py $MINT_USER $MINT_PASS $TRANSACTION_FILE

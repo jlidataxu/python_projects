@@ -45,3 +45,8 @@ lift_proto.*.db
 
 # log file
 log*.*
+
+# gmail API related files
+gmail.storage
+client_secret.json
+
